@@ -1,4 +1,4 @@
-package main.java.sk.stuba.fei.uim.oop.Game.Cards;
+package sk.stuba.fei.uim.oop.Game.Cards;
 
 /*
 Túto kartu pri zahratí vykladáte pred seba. Efekt karty Dynamit sa kontroluje vždy na začiatku kola, pokiaľ dynamit vybuchne pred vami, strácate 3 životy a
@@ -7,7 +7,7 @@ karta sa odhadzuje do balíčka. Pokiaľ vám dynamit nevybuchne, karta sa posú
 Pokiaľ by nastala situácia, že hráč má na začiatku kola pred sebou aj kartu Väzenie aj Dynamit, kontroluje sa najskôr efekt karty Dynamit a až potom Väzenie.
  */
 
-import main.java.sk.stuba.fei.uim.oop.Game.Players.CPlayer;
+import sk.stuba.fei.uim.oop.Game.Players.CPlayer;
 
 import java.util.List;
 import java.util.Random;
@@ -30,8 +30,8 @@ public class CDynamit extends CCard{
     {
         Random rand = new Random();
         // 0 - 3
-        int randomNumber = rand.nextInt(8);
-        int randomNumber2 = rand.nextInt(8);
+        int randomNumber = rand.nextInt(2);
+        int randomNumber2 = rand.nextInt(2);
 
         // dynamit boom
         if (randomNumber == randomNumber2) {

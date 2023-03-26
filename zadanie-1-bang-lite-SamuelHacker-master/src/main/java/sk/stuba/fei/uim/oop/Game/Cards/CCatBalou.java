@@ -1,7 +1,7 @@
-package main.java.sk.stuba.fei.uim.oop.Game.Cards;
+package sk.stuba.fei.uim.oop.Game.Cards;
 
-import main.java.sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
-import main.java.sk.stuba.fei.uim.oop.Game.Players.CPlayer;
+import sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
+import sk.stuba.fei.uim.oop.Game.Players.CPlayer;
 
 import java.util.List;
 import java.util.Random;
@@ -24,7 +24,7 @@ public class CCatBalou extends CCard {
     {
         CPlayer playerToAttack = null;
 
-        System.out.println("Choose ID player on which you want to use Bang card:");
+        System.out.println("Choose ID of player on which you want to use CatBalou card:");
 
         for (CPlayer player : arg_listPlayers)
         {
@@ -44,9 +44,9 @@ public class CCatBalou extends CCard {
                 }
             }
 
-            if (playerToAttack == null)
+            if (playerToAttack == null || playerToAttack == getCardOwner())
             {
-                System.out.println("You do not choosed correct ID, repeat action");
+                System.out.println("You do not chose correct ID, repeat action");
                 return false;
             }
 
@@ -58,7 +58,7 @@ public class CCatBalou extends CCard {
         }
 
 
-        System.out.println("Choose if you want throw card from hand or from front of player ID: " + playerToAttack.getId() + " 1. from hand 2. from front");
+        System.out.println("Choose if you want throw card from hand or from front of player ID: " + playerToAttack.getId() + " || 1. from hand || 2. from front");
 
         int option = CKeyboardInput.readInt();
 
@@ -77,6 +77,8 @@ public class CCatBalou extends CCard {
                 randomNumber = rand.nextInt(playerToAttack.getListCards().size());
                 arg_listTrashCards.add(playerToAttack.getListCards().get(randomNumber));
                 playerToAttack.getListCards().remove(randomNumber);
+                System.out.println("CatBalou randomly threw away one card from player`s hand with player ID: " + playerToAttack.getId());
+
             }
 
             if (option == 2)
@@ -84,6 +86,7 @@ public class CCatBalou extends CCard {
                 randomNumber = rand.nextInt(playerToAttack.getListCardsInFront().size());
                 arg_listTrashCards.add(playerToAttack.getListCardsInFront().get(randomNumber));
                 playerToAttack.getListCardsInFront().remove(randomNumber);
+                System.out.println("CatBalou randomly threw away one card in front of player ID: " + playerToAttack.getId());
             }
 
             arg_listTrashCards.add(this);

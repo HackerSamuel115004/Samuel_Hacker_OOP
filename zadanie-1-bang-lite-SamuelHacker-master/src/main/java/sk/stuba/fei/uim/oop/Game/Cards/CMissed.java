@@ -1,4 +1,4 @@
-package main.java.sk.stuba.fei.uim.oop.Game.Cards;
+package sk.stuba.fei.uim.oop.Game.Cards;
 
 /*
 Karty Bang predstavujú hlavný spôsob, ako znížiť počet životov svojim protihráčom.
@@ -9,7 +9,7 @@ Príklad ťahu v našej zjednodušenej verzií hry: Hráč A zahrá kartu Bang n
 či má kartu vedľa, pokiaľ takú kartu má, karta sa automaticky zahrá, pokiaľ takú kartu nemá, prichádza o život.
  */
 
-import main.java.sk.stuba.fei.uim.oop.Game.Players.CPlayer;
+import sk.stuba.fei.uim.oop.Game.Players.CPlayer;
 
 public class CMissed extends  CCard
 {

@@ -1,4 +1,4 @@
-package main.java.sk.stuba.fei.uim.oop.Game.KeyboardInput;
+package sk.stuba.fei.uim.oop.Game.KeyboardInput;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -112,7 +112,6 @@ public class CKeyboardInput {
             return Integer.MIN_VALUE;
         }
     }
-
 
     public static double readDouble(String promptText, int numberOfTries, String failureText) {
         printPrompt(promptText);

@@ -1,6 +1,6 @@
-package main.java.sk.stuba.fei.uim.oop.Game.Cards;
-import main.java.sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
-import main.java.sk.stuba.fei.uim.oop.Game.Players.CPlayer;
+package sk.stuba.fei.uim.oop.Game.Cards;
+import sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
+import sk.stuba.fei.uim.oop.Game.Players.CPlayer;
 
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class CBang extends CCard
    {
        CPlayer  playerToAttack = null;
 
-       System.out.println("Choose ID player on which you want to use Bang card:");
+       System.out.println("Choose ID of player on which you want to use Bang card:");
 
        for (CPlayer player : arg_listPlayers)
        {
@@ -51,16 +51,16 @@ public class CBang extends CCard
                }
            }
 
-           if (playerToAttack == null)
+           if (playerToAttack == null || playerToAttack == getCardOwner())
            {
-               System.out.println("You do not choosed correct ID, repeat action");
+               System.out.println("You do not chose correct ID, repeat action");
                return false;
            }
 
        }
        else
        {
-           System.out.println("Nezadali ste spravny ciselny vstup, opakujte tah");
+           System.out.println("You did not enter the correct numerical input, try again");
            return false;
        }
 

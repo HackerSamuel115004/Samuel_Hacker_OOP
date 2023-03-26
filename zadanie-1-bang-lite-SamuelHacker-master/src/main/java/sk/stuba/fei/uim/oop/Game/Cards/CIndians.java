@@ -1,11 +1,11 @@
-package main.java.sk.stuba.fei.uim.oop.Game.Cards;
+package sk.stuba.fei.uim.oop.Game.Cards;
 
 /*
 Zahraním karty Indiáni spôsobíte útok indiánov na všetkých hráčov (okrem hráča ktorý ju zahral).
 Každý z hráčou odhodí kartu Bang (ak ju má) alebo príde o jeden život.
  */
 
-import main.java.sk.stuba.fei.uim.oop.Game.Players.CPlayer;
+import sk.stuba.fei.uim.oop.Game.Players.CPlayer;
 
 import java.util.List;
 

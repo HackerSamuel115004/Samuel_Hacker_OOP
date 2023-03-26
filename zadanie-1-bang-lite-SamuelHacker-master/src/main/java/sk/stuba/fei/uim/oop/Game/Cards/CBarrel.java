@@ -1,6 +1,6 @@
-package main.java.sk.stuba.fei.uim.oop.Game.Cards;
+package sk.stuba.fei.uim.oop.Game.Cards;
 
-import main.java.sk.stuba.fei.uim.oop.Game.Players.CPlayer;
+import sk.stuba.fei.uim.oop.Game.Players.CPlayer;
 
 /*
 Barrel

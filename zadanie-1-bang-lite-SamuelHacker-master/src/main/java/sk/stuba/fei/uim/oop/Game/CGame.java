@@ -1,8 +1,8 @@
-package main.java.sk.stuba.fei.uim.oop.Game;
+package sk.stuba.fei.uim.oop.Game;
 
-import main.java.sk.stuba.fei.uim.oop.Game.Cards.*;
-import main.java.sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
-import main.java.sk.stuba.fei.uim.oop.Game.Players.CPlayer;
+import sk.stuba.fei.uim.oop.Game.Cards.*;
+import sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
+import sk.stuba.fei.uim.oop.Game.Players.CPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,21 +114,26 @@ public class CGame {
 
     public void mainLoop()
     {
-        System.out.println("Choose count of players in range of <2, 4>: ");
+        System.out.println("\n\t\t\t\t\t\t\tWELCOME TO BANG LITE, HAVE FUN");
+        System.out.println("\t\t\tBrave players will face each other in this a legendary BANG battle");
+        System.out.println("\t\t\t  In the game, each player will be named by their assigned ID ");
+        System.out.println("\nChoose count of these Wild West gunslingers in range of <2, 4>: ");
 
-        int pocetHracov = CKeyboardInput.readInt();
 
-        if (pocetHracov != Integer.MIN_VALUE && (pocetHracov >= 2 && pocetHracov <= 4)) {
-            countOfPlayers = pocetHracov;
+        int numberPlayers = CKeyboardInput.readInt();
+
+        if (numberPlayers != Integer.MIN_VALUE && (numberPlayers >= 2 && numberPlayers <= 4)) {
+            countOfPlayers = numberPlayers;
             initializeListPlayers();
+            System.out.println("\nBefore your life and death battle be aware this version of Bang is controlled by numerical inputs");
+            System.out.println("     Follow the guides, choose your desired move by number and press the Enter to confirm ");
+
         }
         else
         {
             System.out.println("Not valid count of players, end of application");
             return;
         }
-
-        int cntRound = 1;
 
         while(this.listPlayers.size() != 1)
         {
@@ -184,7 +189,7 @@ public class CGame {
                     }
                     else
                     {
-                        System.out.println("Hrac ID: " + p.getId() + " bol zabity");
+                        System.out.println("Player with ID: " + p.getId() + " was killed");
                         p.setIsAlive(false);
                     }
                 }
@@ -213,12 +218,13 @@ public class CGame {
             }
 
             // Output result after each round
-            System.out.println("Status after " + cntRound + ". round :");
+            System.out.println("\nStatus after this round:");
             this.listPlayers.forEach((CPlayer p) -> p.printPlayerStatus());
             this.listPlayersDeleted.forEach((CPlayer p) -> p.printPlayerStatus());
         }
 
         System.out.println("Congratulation player ID: " + this.listPlayers.get(0).getId() + " you won game !!!");
+        System.out.println("Player ID: " + this.listPlayers.get(0).getId() + " is the mightiest gunslinger in Wild West !!!");
     }
 
 }

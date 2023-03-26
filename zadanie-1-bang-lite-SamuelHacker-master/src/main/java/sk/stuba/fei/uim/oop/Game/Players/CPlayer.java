@@ -1,7 +1,7 @@
-package main.java.sk.stuba.fei.uim.oop.Game.Players;
+package sk.stuba.fei.uim.oop.Game.Players;
 
-import main.java.sk.stuba.fei.uim.oop.Game.Cards.*;
-import main.java.sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
+import sk.stuba.fei.uim.oop.Game.Cards.*;
+import sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class CPlayer
 
    public void printPlayerStatus()
    {
-       System.out.println("Hrac: " + this.ID + " HP: " + this.lifeCount + " Alive: " + isAlive);
+       System.out.println("Player ID: " + this.ID + "  HP: " + this.lifeCount + "  Alive: " + isAlive);
    }
 
    public int getId()
@@ -167,18 +167,18 @@ public class CPlayer
 
     public void playerMove(List<CPlayer> arg_listPlayers, List<CCard> arg_listCards, List<CCard> arg_listTrashCards)
     {
-        System.out.println("Player ID: " + this.ID + " move");
+        System.out.println("\nPlayer ID: " + this.ID + " move");
 
         printCardsInHand();
         printCardsInFront();
 
         while (true)
         {
-            System.out.println("Choose action by number: 1. Put cards in front from hand 2. Put cards in front of other player 3. Use card for yourself 4. Skip round 5. Finish your choosing");
+            System.out.println("\nChoose action by number: 1. Put card in front of you from hand || 2. Put card to other player || 3. Use card for yourself || 4. Skip round || 5. Finish your choosing/round || 6. Show your deck");
 
             int action = CKeyboardInput.readInt();
 
-            if (action == Integer.MIN_VALUE || action < 1 || action > 5)
+            if (action == Integer.MIN_VALUE || action < 1 || action > 6)
             {
                 System.out.println("Bad input");
                 continue;
@@ -204,20 +204,25 @@ public class CPlayer
                 {
                     break;
                 }
+
+                if (action == 6)
+                {
+                    printCardsInHand();
+                    printCardsInFront();
+                }
             }
         }
     }
 
     public void throwAwayCards(List<CCard> arg_listCardsTrash)
     {
-        printCardsInHand();
 
         if( this.listCards.size() > this.lifeCount ) {
             System.out.println("You have more cards in hand (" + this.listCards.size() + ") than your life points (" + this.lifeCount + ")");
-            System.out.println("In order to continue you need to throw away " + (this.listCards.size() - this.lifeCount) + " cards");
+            System.out.println("In order to continue you need to throw away " + (this.listCards.size() - this.lifeCount) + " cards\n");
 
-            while (this.listCards.size() > this.lifeCount) {
-                System.out.println((this.listCards.size() - this.lifeCount) + " cards left to delete choose index of card which you want to throw away:");
+            while (this.listCards.size() > this.lifeCount) { printCardsInHand();
+                System.out.println((this.listCards.size() - this.lifeCount) + " cards left to delete! Choose index of card which you want to throw away:");
 
                 int cardIndex = CKeyboardInput.readInt();
 
@@ -234,78 +239,72 @@ public class CPlayer
 
     private void useCard(List<CCard> arg_listCards, List<CCard> arg_listTrashCards)
     {
-        System.out.println("Choose if you want to use card from hand or front: 1. hand 2. card in front");
+        List<CCard> choosenList = this.listCards;
+        printCardsInHand();
 
-        int option = CKeyboardInput.readInt();
+        System.out.println("Choose index of card which you want to use:");
+        int cardIndex = CKeyboardInput.readInt();
 
-        if (option == Integer.MIN_VALUE || (option != 1 && option != 2 ))
+        if (checkUserChoosenCardIndex(cardIndex, choosenList) == Integer.MIN_VALUE)
         {
             System.out.println("Bad input");
         }
         else
         {
-            List<CCard> choosenList = option == 1 ? this.listCards : this.listCardsInFront;
+            CCard choosenCard = choosenList.get(cardIndex);
 
-            System.out.println("Choose index of card which you want to use");
-            int cardIndex = CKeyboardInput.readInt();
-
-            if (checkUserChoosenCardIndex(cardIndex, choosenList) == Integer.MIN_VALUE)
+            if (choosenCard instanceof CBeer)
             {
-                System.out.println("Bad input");
+                this.lifeCount += 1;
+
+                arg_listTrashCards.add(choosenCard);
+                choosenList.remove(choosenCard);
+
+                System.out.println("Life count raised to: " + this.lifeCount);
             }
-            else
+            else if (choosenCard instanceof CStageCoach)
             {
-                CCard choosenCard = choosenList.get(cardIndex);
-
-                if (choosenCard instanceof CBeer)
+                if (arg_listCards.size() >= 2)
                 {
-                    this.lifeCount += 1;
+                    CCard firstCard = arg_listCards.get(0);
+                    firstCard.setCardOwner(this);
 
-                    arg_listTrashCards.add(choosenCard);
-                    choosenList.remove(choosenCard);
+                    CCard secondCard = arg_listCards.get(0);
+                    secondCard.setCardOwner(this);
 
-                    System.out.println("Life count raised to: " + this.lifeCount);
-                }
-                else if (choosenCard instanceof CStageCoach)
-                {
-                    if (arg_listCards.size() >= 2)
-                    {
-                        CCard firstCard = arg_listCards.get(0);
-                        firstCard.setCardOwner(this);
+                    this.listCards.add(firstCard);
+                    this.listCards.add(secondCard);
 
-                        CCard secondCard = arg_listCards.get(0);
-                        secondCard.setCardOwner(this);
-
-                        this.listCards.add(firstCard);
-                        this.listCards.add(secondCard);
-
-                        arg_listCards.remove(0);
-                        arg_listCards.remove(0);
-                    }
-                    else
-                    {
-                        CCard card = arg_listCards.get(0);
-                        card.setCardOwner(this);
-
-                        this.listCards.add(card);
-
-                        arg_listCards.remove(0);
-                    }
-
-                    System.out.println("Two cards were taken");
+                    arg_listCards.remove(0);
+                    arg_listCards.remove(0);
                 }
                 else
                 {
-                    System.out.println("This type of card can't be used for you");
+                    CCard card = arg_listCards.get(0);
+                    card.setCardOwner(this);
+
+                    this.listCards.add(card);
+
+                    arg_listCards.remove(0);
                 }
+                arg_listTrashCards.add(choosenCard);
+                choosenList.remove(choosenCard);
+
+                System.out.println("Two cards were taken");
+            }
+            else
+            {
+                System.out.println("This type of card can't be used for yourself");
             }
         }
+
     }
 
-    private void putCardsInFront() {
+    private void putCardsInFront()
+    {
 
         printCardsInHand();
-
+        System.out.println("Choose index of card which you want to use: ");
         int cardIndex = CKeyboardInput.readInt();
 
         if (checkUserChoosenCardIndex(cardIndex, this.listCards) == Integer.MIN_VALUE)
@@ -315,15 +314,19 @@ public class CPlayer
         else
         {
             CCard choosenCard = this.listCards.get(cardIndex);
-
-            if (!isCardAlreadyInFront(choosenCard))
+            if (choosenCard instanceof CDynamit || choosenCard instanceof CBarrel)
             {
-                System.out.println("Card is already in front of you, duplicated cards are not allowed");
+
+                if (!isCardAlreadyInFront(choosenCard))
+                {
+                    System.out.println("Card is already in front of you, duplicated cards are not allowed");
+                } else {
+                    this.listCardsInFront.add(choosenCard);
+                    this.listCards.remove(choosenCard);
+                    System.out.println("You have placed a card if front of you");
+                }
             }
-            else {
-                this.listCardsInFront.add(choosenCard);
-                this.listCards.remove(choosenCard);
-            }
+            else { System.out.println("This type of card cannot be put in front of you "); }
         }
     }
 
@@ -341,82 +344,39 @@ public class CPlayer
     private void addCardToAnotherUser(List<CPlayer> arg_listPlayers, List<CCard> arg_listTrashCards)
     {
         printCardsInHand();
-        printCardsInFront();
 
-        System.out.println("You want to add card to player from hand or card in front of you ? : 1. hand 2. card in front");
+        System.out.println("Choose index of card which you want to use: ");
+        int cardIndex = CKeyboardInput.readInt();
 
-        int option = CKeyboardInput.readInt();
-
-        if (option == Integer.MIN_VALUE || (option != 1 && option != 2 ))
+        if (checkUserChoosenCardIndex(cardIndex, this.listCards) == Integer.MIN_VALUE)
         {
             System.out.println("Bad input");
         }
         else
         {
-            if (option == 1)
-            {
-                System.out.println("Choose index of card which you want to use");
-                int cardIndex = CKeyboardInput.readInt();
+            CCard card = this.listCards.get(cardIndex);
 
-                if (checkUserChoosenCardIndex(cardIndex, this.listCards) == Integer.MIN_VALUE)
-                {
+            if (card instanceof CBang || card instanceof CIndians || card instanceof CPrison || card instanceof CCatBalou) {
+
+                if (!card.playCard(arg_listPlayers, arg_listTrashCards)) {
                     System.out.println("Bad input");
-                }
-                else
-                {
-                    CCard card = this.listCards.get(cardIndex);
-
-                    if (card instanceof CBang || card instanceof CIndians || card instanceof CPrison || card instanceof CCatBalou) {
-
-                        if (!card.playCard(arg_listPlayers, arg_listTrashCards)) {
-                            System.out.println("Bad input");
-                        } else {
-                            arg_listTrashCards.add(card);
-                            this.listCards.remove(card);
-                        }
-                    }
-                    else
-                    {
-                        System.out.println("This type of card can't be used to attack an player");
-                    }
+                } else {
+                    arg_listTrashCards.add(card);
+                    this.listCards.remove(card);
                 }
             }
-
-            if (option == 2)
+            else
             {
-                System.out.println("Choose index of card which you want to use");
-                int cardIndex = CKeyboardInput.readInt();
-
-                if (checkUserChoosenCardIndex(cardIndex, this.listCardsInFront) == Integer.MIN_VALUE)
-                {
-                    System.out.println("Bad input");
-                }
-                else
-                {
-                    CCard card = this.listCardsInFront.get(cardIndex);
-
-                    if (card instanceof CBang || card instanceof CIndians || card instanceof CPrison || card instanceof CCatBalou) {
-                        if (!card.playCard(arg_listPlayers, arg_listTrashCards))
-                        {
-                             System.out.println("Bad input");
-                        }
-                        else
-                        {
-                            arg_listTrashCards.add(card);
-                            this.listCards.remove(card);
-                        }
-                    }
-                    else {
-                        System.out.println("This type of card can't be used to attack an player");
-                    }
-                }
+                System.out.println("This type of card can't be used to attack an player");
             }
+
         }
+
     }
 
     private void printCardsInHand()
     {
-        System.out.println("Cards in hand ");
+        System.out.println("Cards in hand: ");
 
         int idCard = 0;
         for (CCard card : this.listCards)
@@ -428,7 +388,7 @@ public class CPlayer
 
     private void printCardsInFront()
     {
-        System.out.println("Cards in front ");
+        System.out.println("Cards in front: ");
 
         int idCard = 0;
         for (CCard card : this.listCardsInFront)
@@ -465,6 +425,11 @@ public class CPlayer
                     wasMissed = true;
                     System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " tried to attack player " + this.ID + " with Bang but was not successful (blocked by Barrel card)");
                 }
+                else
+                {
+                    wasMissed = false;
+                    System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " attacked player ID: " + this.ID + " which have a Barrel but blocking with Barrel was not successful, looking for Missed card in hand ");
+                }
             }
 
             if (!wasMissed)
@@ -478,14 +443,14 @@ public class CPlayer
                         this.listCardsInFront.remove(missedCard);
                     }
 
-                    System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " tried to attack player " + this.ID + " with Bang but was not successful (blocked by Missed card)");
+                    System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " attacked player ID: " + this.ID + " with Bang but attack was not successful (blocked by Missed card)");
                     arg_listCardsTrash.add(missedCard);
                     arg_listCardsTrash.add(arg_Card);
                 }
                 else
                 {
                     this.lifeCount -= 1;
-                    System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " lowered size of player" + this.ID + " by 1 with Bang card");
+                    System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " lowered HP of player ID: " + this.ID + " by 1 with Bang card due lack of Missed card or having a Barrel in front");
                     arg_listCardsTrash.add(arg_Card);
                 }
             }
@@ -498,7 +463,7 @@ public class CPlayer
             if (cardBang == null)
             {
                 this.lifeCount -= 1;
-                System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " lowered HP of player " + this.ID + " by 1 point ID");
+                System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " lowered HP of player " + this.ID + " by 1 point");
             }
             else
             {
@@ -507,13 +472,13 @@ public class CPlayer
                     this.listCardsInFront.remove(cardBang);
                 }
 
-                System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " attacked with card Indians but player ID: " + this.ID + " had CBang card, so no life point of player is lost");
+                System.out.println("Player ID: " + arg_Card.getCardOwner().getId() + " attacked with card Indians but player ID: " + this.ID + " had Bang card, so no HP of player is lost");
             }
         }
 
         if (this.lifeCount <= 0) {
             this.setIsAlive(false);
-            System.out.println("Player ID: " + this.ID + " have died");
+            System.out.println("Player with ID: " + this.ID + " have died");
         }
     }
 }

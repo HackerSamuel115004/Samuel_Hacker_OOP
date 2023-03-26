@@ -1,4 +1,4 @@
-package main.java.sk.stuba.fei.uim.oop.Game.Cards;
+package sk.stuba.fei.uim.oop.Game.Cards;
 
 /*
 Túto kartu dávate pred ľubovoného iného hráča, a danou kartou ho uväzníte.
@@ -7,8 +7,8 @@ Pokiaľ má hráč pred začiatkom svojho kola pred sebou kartu Väzenie, musí 
 V oboch prípadoch sa karta po kontrole jej efektu vyhadzuje do odhadzovacieho balíčka.
  */
 
-import main.java.sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
-import main.java.sk.stuba.fei.uim.oop.Game.Players.CPlayer;
+import sk.stuba.fei.uim.oop.Game.KeyboardInput.CKeyboardInput;
+import sk.stuba.fei.uim.oop.Game.Players.CPlayer;
 
 import java.util.List;
 import java.util.Random;
@@ -30,7 +30,7 @@ public class CPrison extends CCard {
     {
         CPlayer playerToAttack = null;
 
-        System.out.println("Choose ID player on which you want to use Bang card:");
+        System.out.println("Choose ID player on which you want to use PRISON card:");
 
         for (CPlayer player : arg_listPlayers)
         {
@@ -50,21 +50,22 @@ public class CPrison extends CCard {
                 }
             }
 
-            if (playerToAttack == null)
+            if (playerToAttack == null || playerToAttack == getCardOwner())
             {
-                System.out.println("You do not choosed correct ID, repeat action");
+                System.out.println("You do not chose correct ID, repeat action");
                 return false;
             }
 
         }
         else
         {
-            System.out.println("You do not choosed correct input, repeat action");
+            System.out.println("You do not chose correct input, repeat action");
             return false;
         }
 
         playerToAttack.getListCardsInFront().add(this);
         this.setCardReceiver(playerToAttack);
+        System.out.println("You set Player ID: " + this.getCardReceiver().getId() + "  to PRISON");
 
         return true;
     }
@@ -79,6 +80,7 @@ public class CPrison extends CCard {
 
         if (randomNumber == randomNumber2) {
             this.getCardReceiver().setIsInPrison(false);
+            System.out.println("Player ID: " + this.getCardReceiver().getId() + " was send to PRISON, but he manage to escape, player continue with own move");
         }
         else {
             this.getCardReceiver().setIsInPrison(true);
